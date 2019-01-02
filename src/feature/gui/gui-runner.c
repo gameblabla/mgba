@@ -20,6 +20,9 @@
 
 #include <sys/time.h>
 
+#include <libpng16/png.h>
+#include <png-io.h>
+
 mLOG_DECLARE_CATEGORY(GUI_RUNNER);
 mLOG_DEFINE_CATEGORY(GUI_RUNNER, "GUI Runner", "gui.runner");
 

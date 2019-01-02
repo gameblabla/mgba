@@ -55,7 +55,7 @@ void GBVideoProxyRendererCreate(struct GBVideoProxyRenderer* renderer, struct GB
 }
 
 static void _init(struct GBVideoProxyRenderer* proxyRenderer) {
-	mVideoLoggerRendererInit(proxyRenderer->logger);
+	//mVideoLoggerRendererInit(proxyRenderer->logger);
 
 	if (proxyRenderer->logger->block) {
 		proxyRenderer->backend->vram = (uint8_t*) proxyRenderer->logger->vram;
@@ -70,7 +70,7 @@ static void _reset(struct GBVideoProxyRenderer* proxyRenderer, enum GBModel mode
 
 	proxyRenderer->oamMax = 0;
 
-	mVideoLoggerRendererReset(proxyRenderer->logger);
+	//mVideoLoggerRendererReset(proxyRenderer->logger);
 }
 
 void GBVideoProxyRendererShim(struct GBVideo* video, struct GBVideoProxyRenderer* renderer) {
@@ -95,7 +95,7 @@ void GBVideoProxyRendererUnshim(struct GBVideo* video, struct GBVideoProxyRender
 	renderer->backend->vram = video->vram;
 	renderer->backend->oam = &video->oam;
 
-	mVideoLoggerRendererDeinit(renderer->logger);
+	//mVideoLoggerRendererDeinit(renderer->logger);
 }
 
 void GBVideoProxyRendererInit(struct GBVideoRenderer* renderer, enum GBModel model, bool borders) {
@@ -111,7 +111,7 @@ void GBVideoProxyRendererDeinit(struct GBVideoRenderer* renderer) {
 
 	proxyRenderer->backend->deinit(proxyRenderer->backend);
 
-	mVideoLoggerRendererDeinit(proxyRenderer->logger);
+	//mVideoLoggerRendererDeinit(proxyRenderer->logger);
 }
 
 static bool _parsePacket(struct mVideoLogger* logger, const struct mVideoLoggerDirtyInfo* item) {
@@ -183,7 +183,7 @@ static uint16_t* _vramBlock(struct mVideoLogger* logger, uint32_t address) {
 uint8_t GBVideoProxyRendererWriteVideoRegister(struct GBVideoRenderer* renderer, uint16_t address, uint8_t value) {
 	struct GBVideoProxyRenderer* proxyRenderer = (struct GBVideoProxyRenderer*) renderer;
 
-	mVideoLoggerRendererWriteVideoRegister(proxyRenderer->logger, address, value);
+	//mVideoLoggerRendererWriteVideoRegister(proxyRenderer->logger, address, value);
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->writeVideoRegister(proxyRenderer->backend, address, value);
 	}
@@ -195,12 +195,12 @@ void GBVideoProxyRendererWriteSGBPacket(struct GBVideoRenderer* renderer, uint8_
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->writeSGBPacket(proxyRenderer->backend, data);
 	}
-	mVideoLoggerWriteBuffer(proxyRenderer->logger, BUFFER_SGB, 0, 16, data);
+	//mVideoLoggerWriteBuffer(proxyRenderer->logger, BUFFER_SGB, 0, 16, data);
 }
 
 void GBVideoProxyRendererWriteVRAM(struct GBVideoRenderer* renderer, uint16_t address) {
 	struct GBVideoProxyRenderer* proxyRenderer = (struct GBVideoProxyRenderer*) renderer;
-	mVideoLoggerRendererWriteVRAM(proxyRenderer->logger, address);
+	//mVideoLoggerRendererWriteVRAM(proxyRenderer->logger, address);
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->writeVRAM(proxyRenderer->backend, address);
 	}
@@ -211,7 +211,7 @@ void GBVideoProxyRendererWriteVRAM(struct GBVideoRenderer* renderer, uint16_t ad
 
 void GBVideoProxyRendererWritePalette(struct GBVideoRenderer* renderer, int address, uint16_t value) {
 	struct GBVideoProxyRenderer* proxyRenderer = (struct GBVideoProxyRenderer*) renderer;
-	mVideoLoggerRendererWritePalette(proxyRenderer->logger, address, value);
+	//mVideoLoggerRendererWritePalette(proxyRenderer->logger, address, value);
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->writePalette(proxyRenderer->backend, address, value);
 	}
@@ -225,7 +225,7 @@ void GBVideoProxyRendererWriteOAM(struct GBVideoRenderer* renderer, uint16_t oam
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->writeOAM(proxyRenderer->backend, oam);
 	}
-	mVideoLoggerRendererWriteOAM(proxyRenderer->logger, oam, ((uint8_t*) proxyRenderer->d.oam->raw)[oam]);
+	//mVideoLoggerRendererWriteOAM(proxyRenderer->logger, oam, ((uint8_t*) proxyRenderer->d.oam->raw)[oam]);
 }
 
 void GBVideoProxyRendererDrawRange(struct GBVideoRenderer* renderer, int startX, int endX, int y, struct GBObj* obj, size_t oamMax) {
@@ -233,8 +233,8 @@ void GBVideoProxyRendererDrawRange(struct GBVideoRenderer* renderer, int startX,
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->drawRange(proxyRenderer->backend, startX, endX, y, obj, oamMax);
 	}
-	mVideoLoggerWriteBuffer(proxyRenderer->logger, BUFFER_OAM, 0, oamMax * sizeof(*obj), obj);	
-	mVideoLoggerRendererDrawRange(proxyRenderer->logger, startX, endX, y);	
+	//mVideoLoggerWriteBuffer(proxyRenderer->logger, BUFFER_OAM, 0, oamMax * sizeof(*obj), obj);	
+	//mVideoLoggerRendererDrawRange(proxyRenderer->logger, startX, endX, y);	
 }
 
 void GBVideoProxyRendererFinishScanline(struct GBVideoRenderer* renderer, int y) {
@@ -242,7 +242,7 @@ void GBVideoProxyRendererFinishScanline(struct GBVideoRenderer* renderer, int y)
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->finishScanline(proxyRenderer->backend, y);
 	}
-	mVideoLoggerRendererDrawScanline(proxyRenderer->logger, y);
+	//mVideoLoggerRendererDrawScanline(proxyRenderer->logger, y);
 	if (proxyRenderer->logger->block && proxyRenderer->logger->wake) {
 		proxyRenderer->logger->wake(proxyRenderer->logger, y);
 	}
@@ -256,8 +256,8 @@ void GBVideoProxyRendererFinishFrame(struct GBVideoRenderer* renderer) {
 	if (!proxyRenderer->logger->block) {
 		proxyRenderer->backend->finishFrame(proxyRenderer->backend);
 	}
-	mVideoLoggerRendererFinishFrame(proxyRenderer->logger);
-	mVideoLoggerRendererFlush(proxyRenderer->logger);
+	//mVideoLoggerRendererFinishFrame(proxyRenderer->logger);
+	//mVideoLoggerRendererFlush(proxyRenderer->logger);
 	if (proxyRenderer->logger->block && proxyRenderer->logger->wait) {
 		proxyRenderer->logger->unlock(proxyRenderer->logger);
 	}
@@ -268,7 +268,7 @@ static void GBVideoProxyRendererEnableSGBBorder(struct GBVideoRenderer* renderer
 	if (proxyRenderer->logger->block && proxyRenderer->logger->wait) {
 		proxyRenderer->logger->lock(proxyRenderer->logger);
 		// Insert an extra item into the queue to make sure it gets flushed
-		mVideoLoggerRendererFlush(proxyRenderer->logger);
+		//mVideoLoggerRendererFlush(proxyRenderer->logger);
 		proxyRenderer->logger->wait(proxyRenderer->logger);
 	}
 	proxyRenderer->backend->enableSGBBorder(proxyRenderer->backend, enable);
@@ -282,7 +282,7 @@ static void GBVideoProxyRendererGetPixels(struct GBVideoRenderer* renderer, size
 	if (proxyRenderer->logger->block && proxyRenderer->logger->wait) {
 		proxyRenderer->logger->lock(proxyRenderer->logger);
 		// Insert an extra item into the queue to make sure it gets flushed
-		mVideoLoggerRendererFlush(proxyRenderer->logger);
+		//mVideoLoggerRendererFlush(proxyRenderer->logger);
 		proxyRenderer->logger->wait(proxyRenderer->logger);
 	}
 	proxyRenderer->backend->getPixels(proxyRenderer->backend, stride, pixels);
@@ -296,7 +296,7 @@ static void GBVideoProxyRendererPutPixels(struct GBVideoRenderer* renderer, size
 	if (proxyRenderer->logger->block && proxyRenderer->logger->wait) {
 		proxyRenderer->logger->lock(proxyRenderer->logger);
 		// Insert an extra item into the queue to make sure it gets flushed
-		mVideoLoggerRendererFlush(proxyRenderer->logger);
+		//mVideoLoggerRendererFlush(proxyRenderer->logger);
 		proxyRenderer->logger->wait(proxyRenderer->logger);
 	}
 	proxyRenderer->backend->putPixels(proxyRenderer->backend, stride, pixels);

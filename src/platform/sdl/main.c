@@ -54,13 +54,15 @@ int main(int argc, char** argv) {
 	struct mSDLRenderer renderer = {0};
 
 	struct mCoreOptions opts = {
-		.useBios = true,
-		.rewindEnable = true,
-		.rewindBufferCapacity = 600,
-		.audioBuffers = 1024,
+		.useBios = false,
+		.skipBios = true,
+		.rewindEnable = false,
+		.rewindBufferCapacity = 0,
+		.audioBuffers = 512,
 		.videoSync = false,
-		.audioSync = true,
+		.audioSync = false,
 		.volume = 0x100,
+		.frameskip = 3,
 	};
 
 	struct mArguments args;
@@ -128,8 +130,10 @@ int main(int argc, char** argv) {
 	mCoreConfigLoadDefaults(&renderer.core->config, &opts);
 	mCoreLoadConfig(renderer.core);
 
+
 	renderer.viewportWidth = renderer.core->opts.width;
 	renderer.viewportHeight = renderer.core->opts.height;
+
 #if SDL_VERSION_ATLEAST(2, 0, 0)
 	renderer.player.fullscreen = renderer.core->opts.fullscreen;
 	renderer.player.windowUpdated = 0;
@@ -222,7 +226,11 @@ int mSDLRun(struct mSDLRenderer* renderer, struct mArguments* args) {
 	}
 
 	renderer->audio.samples = renderer->core->opts.audioBuffers;
+#ifdef ARCADE_MINI
+	renderer->audio.sampleRate = 11025;
+#else
 	renderer->audio.sampleRate = 44100;
+#endif
 
 	bool didFail = !mCoreThreadStart(&thread);
 	if (!didFail) {

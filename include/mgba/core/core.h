@@ -14,9 +14,9 @@ CXX_GUARD_START
 #if !defined(MINIMAL_CORE) || MINIMAL_CORE < 2
 #include <mgba/core/directories.h>
 #endif
-#ifndef MINIMAL_CORE
+//#ifndef MINIMAL_CORE
 #include <mgba/core/input.h>
-#endif
+//#endif
 #include <mgba/core/interface.h>
 #ifdef USE_DEBUGGERS
 #include <mgba/debugger/debugger.h>
@@ -50,9 +50,9 @@ struct mCore {
 #if !defined(MINIMAL_CORE) || MINIMAL_CORE < 2
 	struct mDirectorySet dirs;
 #endif
-#ifndef MINIMAL_CORE
+//#ifndef MINIMAL_CORE
 	struct mInputMap inputMap;
-#endif
+//#endif
 	struct mCoreConfig config;
 	struct mCoreOptions opts;
 

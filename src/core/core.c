@@ -55,9 +55,9 @@ struct mCore* mCoreFindVF(struct VFile* vf) {
 	if (filter->open) {
 		return filter->open();
 	}
-#ifndef MINIMAL_CORE
+/*#ifndef MINIMAL_CORE
 	return mVideoLogCoreFind(vf);
-#endif
+#endif*/
 	return NULL;
 }
 

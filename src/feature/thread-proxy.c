@@ -25,7 +25,7 @@ static void _wait(struct mVideoLogger* logger);
 static void _wake(struct mVideoLogger* logger, int y);
 
 void mVideoThreadProxyCreate(struct mVideoThreadProxy* renderer) {
-	mVideoLoggerRendererCreate(&renderer->d, false);
+	//mVideoLoggerRendererCreate(&renderer->d, false);
 	renderer->d.block = true;
 
 	renderer->d.init = mVideoThreadProxyInit;
@@ -172,11 +172,11 @@ static THREAD_ENTRY _proxyThread(void* logger) {
 		}
 		proxyRenderer->threadState = PROXY_THREAD_BUSY;
 		MutexUnlock(&proxyRenderer->mutex);
-		if (!mVideoLoggerRendererRun(&proxyRenderer->d, false)) {
+		/*if (!mVideoLoggerRendererRun(&proxyRenderer->d, false)) {
 			// FIFO was corrupted
 			proxyRenderer->threadState = PROXY_THREAD_STOPPED;
 			mLOG(GBA_VIDEO, ERROR, "Proxy thread queue got corrupted!");
-		}
+		}*/
 		MutexLock(&proxyRenderer->mutex);
 		ConditionWake(&proxyRenderer->fromThreadCond);
 		if (proxyRenderer->threadState != PROXY_THREAD_STOPPED) {

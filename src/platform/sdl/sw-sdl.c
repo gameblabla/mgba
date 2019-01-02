@@ -20,10 +20,22 @@ void mSDLSWCreate(struct mSDLRenderer* renderer) {
 	renderer->runloop = mSDLSWRunloop;
 }
 
+SDL_Surface* temporary_surface;
+
 bool mSDLSWInit(struct mSDLRenderer* renderer) {
 #if !SDL_VERSION_ATLEAST(2, 0, 0)
 #ifdef COLOR_16_BIT
-	SDL_SetVideoMode(renderer->viewportWidth, renderer->viewportHeight, 16, SDL_DOUBLEBUF | SDL_HWSURFACE);
+#ifdef ARCADE_MINI
+	SDL_SetVideoMode(480, 272, 16, SDL_HWSURFACE|SDL_ANYFORMAT);
+#elif defined(RS97)
+	SDL_SetVideoMode(320, 480, 16, SDL_HWSURFACE|SDL_ANYFORMAT);
+#else
+	SDL_SetVideoMode(240, 160, 16, SDL_HWSURFACE);
+#endif
+	
+	temporary_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, renderer->viewportWidth, renderer->viewportHeight, 16, 0,0,0,0);
+
+	printf("Height %d\n",renderer->viewportHeight, renderer->viewportWidth);
 #else
 	SDL_SetVideoMode(renderer->viewportWidth, renderer->viewportHeight, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 #endif
@@ -54,7 +66,7 @@ bool mSDLSWInit(struct mSDLRenderer* renderer) {
 	SDL_LockSurface(surface);
 
 	if (renderer->ratio == 1) {
-		renderer->core->setVideoBuffer(renderer->core, surface->pixels, surface->pitch / BYTES_PER_PIXEL);
+		renderer->core->setVideoBuffer(renderer->core, temporary_surface->pixels, temporary_surface->pitch / BYTES_PER_PIXEL);
 	} else {
 #ifdef USE_PIXMAN
 		renderer->outputBuffer = malloc(width * height * BYTES_PER_PIXEL);
@@ -129,7 +141,9 @@ void mSDLSWRunloop(struct mSDLRenderer* renderer, void* user) {
 				abort();
 			}
 #endif
+			
 			SDL_UnlockSurface(surface);
+			SDL_SoftStretch(temporary_surface, NULL, surface, NULL);
 			SDL_Flip(surface);
 			SDL_LockSurface(surface);
 #endif

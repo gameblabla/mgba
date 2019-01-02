@@ -882,7 +882,7 @@ static void _GBACoreAdjustVideoLayer(struct mCore* core, size_t id, int32_t x, i
 
 #ifndef MINIMAL_CORE
 static void _GBACoreStartVideoLog(struct mCore* core, struct mVideoLogContext* context) {
-	struct GBACore* gbacore = (struct GBACore*) core;
+	/*struct GBACore* gbacore = (struct GBACore*) core;
 	struct GBA* gba = core->board;
 	gbacore->logContext = context;
 
@@ -892,20 +892,20 @@ static void _GBACoreStartVideoLog(struct mCore* core, struct mVideoLogContext* c
 
 	int channelId = mVideoLoggerAddChannel(context);
 	gbacore->proxyRenderer.logger = malloc(sizeof(struct mVideoLogger));
-	mVideoLoggerRendererCreate(gbacore->proxyRenderer.logger, false);
-	mVideoLoggerAttachChannel(gbacore->proxyRenderer.logger, context, channelId);
+	//mVideoLoggerRendererCreate(gbacore->proxyRenderer.logger, false);
+	//mVideoLoggerAttachChannel(gbacore->proxyRenderer.logger, context, channelId);
 	gbacore->proxyRenderer.logger->block = false;
 
 	GBAVideoProxyRendererCreate(&gbacore->proxyRenderer, &gbacore->renderer.d);
-	GBAVideoProxyRendererShim(&gba->video, &gbacore->proxyRenderer);
+	GBAVideoProxyRendererShim(&gba->video, &gbacore->proxyRenderer);*/
 }
 
 static void _GBACoreEndVideoLog(struct mCore* core) {
-	struct GBACore* gbacore = (struct GBACore*) core;
+	/*struct GBACore* gbacore = (struct GBACore*) core;
 	struct GBA* gba = core->board;
 	GBAVideoProxyRendererUnshim(&gba->video, &gbacore->proxyRenderer);
 	free(gbacore->proxyRenderer.logger);
-	gbacore->proxyRenderer.logger = NULL;
+	gbacore->proxyRenderer.logger = NULL;*/
 }
 #endif
 
@@ -995,29 +995,29 @@ struct mCore* GBACoreCreate(void) {
 
 #ifndef MINIMAL_CORE
 static void _GBAVLPStartFrameCallback(void *context) {
-	struct mCore* core = context;
+	/*struct mCore* core = context;
 	struct GBACore* gbacore = (struct GBACore*) core;
 	struct GBA* gba = core->board;
 
-	if (!mVideoLoggerRendererRun(gbacore->proxyRenderer.logger, true)) {
+	if (!//mVideoLoggerRendererRun(gbacore->proxyRenderer.logger, true)) {
 		GBAVideoProxyRendererUnshim(&gba->video, &gbacore->proxyRenderer);
 		mVideoLogContextRewind(gbacore->logContext, core);
 		GBAVideoProxyRendererShim(&gba->video, &gbacore->proxyRenderer);
-	}
+	}*/
 }
 
 static bool _GBAVLPInit(struct mCore* core) {
-	struct GBACore* gbacore = (struct GBACore*) core;
+	/*struct GBACore* gbacore = (struct GBACore*) core;
 	if (!_GBACoreInit(core)) {
 		return false;
 	}
 	gbacore->proxyRenderer.logger = malloc(sizeof(struct mVideoLogger));
-	mVideoLoggerRendererCreate(gbacore->proxyRenderer.logger, true);
+	//mVideoLoggerRendererCreate(gbacore->proxyRenderer.logger, true);
 	GBAVideoProxyRendererCreate(&gbacore->proxyRenderer, NULL);
 	memset(&gbacore->logCallbacks, 0, sizeof(gbacore->logCallbacks));
 	gbacore->logCallbacks.videoFrameStarted = _GBAVLPStartFrameCallback;
 	gbacore->logCallbacks.context = core;
-	core->addCoreCallbacks(core, &gbacore->logCallbacks);
+	core->addCoreCallbacks(core, &gbacore->logCallbacks);*/
 	return true;
 }
 
@@ -1057,7 +1057,7 @@ static bool _GBAVLPLoadROM(struct mCore* core, struct VFile* vf) {
 		gbacore->logContext = NULL;
 		return false;
 	}
-	mVideoLoggerAttachChannel(gbacore->proxyRenderer.logger, gbacore->logContext, 0);
+	//mVideoLoggerAttachChannel(gbacore->proxyRenderer.logger, gbacore->logContext, 0);
 	return true;
 }
 

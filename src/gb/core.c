@@ -862,26 +862,26 @@ static void _GBCoreAdjustVideoLayer(struct mCore* core, size_t id, int32_t x, in
 
 #ifndef MINIMAL_CORE
 static void _GBCoreStartVideoLog(struct mCore* core, struct mVideoLogContext* context) {
-	struct GBCore* gbcore = (struct GBCore*) core;
+	/*struct GBCore* gbcore = (struct GBCore*) core;
 	struct GB* gb = core->board;
 	gbcore->logContext = context;
 
-	int channelId = mVideoLoggerAddChannel(context);
+	//int channelId = mVideoLoggerAddChannel(context);
 	gbcore->proxyRenderer.logger = malloc(sizeof(struct mVideoLogger));
-	mVideoLoggerRendererCreate(gbcore->proxyRenderer.logger, false);
-	mVideoLoggerAttachChannel(gbcore->proxyRenderer.logger, context, channelId);
+	//mVideoLoggerRendererCreate(gbcore->proxyRenderer.logger, false);
+	//mVideoLoggerAttachChannel(gbcore->proxyRenderer.logger, context, channelId);
 	gbcore->proxyRenderer.logger->block = false;
 
 	GBVideoProxyRendererCreate(&gbcore->proxyRenderer, &gbcore->renderer.d);
-	GBVideoProxyRendererShim(&gb->video, &gbcore->proxyRenderer);
+	GBVideoProxyRendererShim(&gb->video, &gbcore->proxyRenderer);*/
 }
 
 static void _GBCoreEndVideoLog(struct mCore* core) {
-	struct GBCore* gbcore = (struct GBCore*) core;
+	/*struct GBCore* gbcore = (struct GBCore*) core;
 	struct GB* gb = core->board;
 	GBVideoProxyRendererUnshim(&gb->video, &gbcore->proxyRenderer);
 	free(gbcore->proxyRenderer.logger);
-	gbcore->proxyRenderer.logger = NULL;
+	gbcore->proxyRenderer.logger = NULL;*/
 }
 #endif
 
@@ -976,11 +976,11 @@ static void _GBVLPStartFrameCallback(void *context) {
 	struct GBCore* gbcore = (struct GBCore*) core;
 	struct GB* gb = core->board;
 
-	if (!mVideoLoggerRendererRun(gbcore->proxyRenderer.logger, true)) {
+	/*if (!mVideoLoggerRendererRun(gbcore->proxyRenderer.logger, true)) {
 		GBVideoProxyRendererUnshim(&gb->video, &gbcore->proxyRenderer);
 		mVideoLogContextRewind(gbcore->logContext, core);
 		GBVideoProxyRendererShim(&gb->video, &gbcore->proxyRenderer);
-	}
+	}*/
 }
 
 static bool _GBVLPInit(struct mCore* core) {
@@ -989,7 +989,7 @@ static bool _GBVLPInit(struct mCore* core) {
 		return false;
 	}
 	gbcore->proxyRenderer.logger = malloc(sizeof(struct mVideoLogger));
-	mVideoLoggerRendererCreate(gbcore->proxyRenderer.logger, true);
+	//mVideoLoggerRendererCreate(gbcore->proxyRenderer.logger, true);
 	GBVideoProxyRendererCreate(&gbcore->proxyRenderer, NULL);
 	memset(&gbcore->logCallbacks, 0, sizeof(gbcore->logCallbacks));
 	gbcore->logCallbacks.videoFrameStarted = _GBVLPStartFrameCallback;
@@ -1027,14 +1027,14 @@ static void _GBVLPReset(struct mCore* core) {
 }
 
 static bool _GBVLPLoadROM(struct mCore* core, struct VFile* vf) {
-	struct GBCore* gbcore = (struct GBCore*) core;
+	/*struct GBCore* gbcore = (struct GBCore*) core;
 	gbcore->logContext = mVideoLogContextCreate(NULL);
 	if (!mVideoLogContextLoad(gbcore->logContext, vf)) {
 		mVideoLogContextDestroy(core, gbcore->logContext);
 		gbcore->logContext = NULL;
 		return false;
-	}
-	mVideoLoggerAttachChannel(gbcore->proxyRenderer.logger, gbcore->logContext, 0);
+	}*/
+	//mVideoLoggerAttachChannel(gbcore->proxyRenderer.logger, gbcore->logContext, 0);
 	return true;
 }
 

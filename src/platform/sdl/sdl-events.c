@@ -124,6 +124,17 @@ void mSDLInitBindingsGBA(struct mInputMap* inputMap) {
 	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_DOWN, GBA_KEY_DOWN);
 	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_LEFT, GBA_KEY_LEFT);
 	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_RIGHT, GBA_KEY_RIGHT);
+#elif defined(ARCADE_MINI) || defined(RS97)
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_LCTRL, GBA_KEY_A);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_LALT, GBA_KEY_B);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_TAB, GBA_KEY_L);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_BACKSPACE, GBA_KEY_R);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_RETURN, GBA_KEY_START);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_ESCAPE, GBA_KEY_SELECT);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_UP, GBA_KEY_UP);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_DOWN, GBA_KEY_DOWN);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_LEFT, GBA_KEY_LEFT);
+	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_RIGHT, GBA_KEY_RIGHT);
 #else
 	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_x, GBA_KEY_A);
 	mInputBindKey(inputMap, SDL_BINDING_KEY, SDLK_z, GBA_KEY_B);
@@ -407,6 +418,11 @@ static void _pauseAfterFrame(struct mCoreThread* context) {
 
 static void _mSDLHandleKeypress(struct mCoreThread* context, struct mSDLPlayer* sdlContext, const struct SDL_KeyboardEvent* event) {
 	int key = -1;
+	
+	if (event->keysym.sym == SDLK_ESCAPE) {
+		mCoreThreadEnd(context);
+	}
+	
 	if (!(event->keysym.mod & ~(KMOD_NUM | KMOD_CAPS))) {
 		key = mInputMapKey(sdlContext->bindings, SDL_BINDING_KEY, event->keysym.sym);
 	}
@@ -427,6 +443,7 @@ static void _mSDLHandleKeypress(struct mCoreThread* context, struct mSDLPlayer* 
 	if (event->keysym.sym == SDLK_BACKQUOTE) {
 		mCoreThreadSetRewinding(context, event->type == SDL_KEYDOWN);
 	}
+	
 	if (event->type == SDL_KEYDOWN) {
 		switch (event->keysym.sym) {
 #ifdef USE_DEBUGGERS
@@ -446,7 +463,7 @@ static void _mSDLHandleKeypress(struct mCoreThread* context, struct mSDLPlayer* 
 			context->frameCallback = _pauseAfterFrame;
 			mCoreThreadUnpause(context);
 			return;
-#ifdef BUILD_PANDORA
+#if defined(BUILD_PANDORA) || defined(ARCADE_MINI) || defined(RS97)
 		case SDLK_ESCAPE:
 			mCoreThreadEnd(context);
 			return;
